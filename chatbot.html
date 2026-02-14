@@ -51,8 +51,7 @@
         }
         
     function ChatMessages(){
-        let chatMessages;
-        chatMessages = [{
+        const array = React.useState([{
             sender: "user",
             message: "hello Chatbot",
             id: 1
@@ -70,13 +69,17 @@
             message: "The Weather is Sunny Today ",
             sender: "bot",
             id: 4
-        }, {
-            message: "Thank you !!",
-            sender: "user",
-            id: 5
-        }];
+        }]);
+        const chatMessages = array[0];
+        const setChatMessages = array[1];
+
         function SendMessage(){
-            console.log('Send Message')
+        
+            setChatMessages([...chatMessages, {
+                    sender: "user",
+                    message: "What is the time now ?",
+                    id: crypto.randomUUID()
+                }])
         }
         
         
@@ -94,7 +97,7 @@
                 />
             )
         })}
-           </>
+            </>
         )
 
 
