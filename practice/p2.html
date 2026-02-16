@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+   
+</head>
+<body>
+
+    <div class="js-container">
+
+
+    </div>
+    <script type="text/babel">
+        
+        function InputText(props){
+            const {text,setText} = props;
+            function handleInput(e){
+                setText(e.target.value);
+            }
+            function handleKeyDown(e){
+                if (e.key === 'Escape') {
+                    setText('');
+                }
+            }
+            return (
+                <div>
+                    <input
+                        type="text"
+                        value={text}
+                        onChange={handleInput}
+                        onKeyDown={handleKeyDown}
+                    />
+                    <button onClick={() => setText('')}>reset</button>
+                    <button onClick={() =>
+                        setText('Rajan')
+
+                    }>Example</button>
+                </div>
+            )
+            
+            
+        }
+
+
+        function App() {
+            const [text, setText] = React.useState('');
+            return (
+                <div>
+                    <h1>Practice Page</h1>
+                    <InputText text={text} setText={setText} />
+                    <p>hello {text}</p>
+                </div>
+            )
+        }
+
+        const container = document.querySelector('.js-container');
+        ReactDOM.createRoot(container).render(<App />)
+
+    </script>
+</body>
+</html>

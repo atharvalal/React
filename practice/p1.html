@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Page</title>
+    <script src="https://unpkg.com/supersimpledev/react.js"></script>
+    <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+    <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+</head>
+<body>
+<div class="js-container"></div>
+<script type="text/babel">
+
+
+
+function FirstButton(props) {
+    const {count,setCount} = props;
+    function increment(){
+        setCount(count + 1);
+    }
+
+    return (
+        <div>
+            <button onClick={increment}>click {count} times</button>
+        </div>
+    )
+}
+function SecondButton(props) {
+    const {secondCount,setSecondCount} = props;
+    function increment(){
+        setSecondCount(secondCount + 1);
+    }
+
+    return (
+        <div>
+            <button onClick={increment}>click {secondCount} times</button>
+        </div>
+    )
+}
+function App() {
+    const [count, setCount] = React.useState(0);
+    const [secondCount, setSecondCount] = React.useState(0);
+    return (
+        <div>
+            <h1>Practice Page</h1>
+            <FirstButton count={count} setCount={setCount} />
+            <SecondButton secondCount={secondCount} setSecondCount={setSecondCount} />
+        </div>
+    )
+}
+
+const container = document.querySelector('.js-container');
+ReactDOM.createRoot(container).render(<App />)
+
+
+
+
+
+
+</script>
+    
+</body>
+</html>

@@ -2,28 +2,76 @@
 <html>
 <head>
     <title>Chatbot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
 <div class="js-container"></div>
+<link rel="stylesheet" href="chatbot.css"/>
 <script src="https://unpkg.com/supersimpledev/dayjs.js"></script>
 <script src="https://unpkg.com/supersimpledev/react.js"></script>
 <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
 <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+<script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
 <script type="text/babel">
 
-    function ChatInput() {
+    function ChatInput(props) {
+        const {chatMessages, setChatMessages} = props;
+        const [inputText, setInputText] = React.useState('');
+
+
+        function saveInputText(event){
+            setInputText(event.target.value);
+        }
+        
+
+        function sendMessage(){
+            if (!inputText.trim()) return;
+            const response = Chatbot.getResponse(inputText)
+            setChatMessages((prev) => [
+                ...prev,
+                {
+                    sender: "user",
+                    message: inputText,
+                    id: crypto.randomUUID()
+                },
+                {
+                    sender: "bot",
+                    message: response,
+                    id: crypto.randomUUID()
+                }
+            ])
+            setInputText('');
+        }
+        function handleKeydown(event) {
+
+            if (event.key === 'Enter') {
+                sendMessage();
+            } else if (event.key === 'Escape') {
+                setInputText('');
+            }
+        }
+
+
         return (
-            <>
-                <input type="text" placeholder="Send a Message To Chatbot" size="30"/>
-                
-                <button>Send</button>
-            </>
+            <div className="chat-input-row">
+                <input type="text"
+                className="chat-input"
+                placeholder="Send a message to Chatbot"
+                onChange={saveInputText}
+                onKeyDown={handleKeydown}
+                value={inputText}
+                />
+                <button
+                className="chat-send-btn"
+                onClick={sendMessage}
+                >Send</button>
+            </div>
         )
     }
     
     function ChatMessage(props){
         const {sender, message} = props;
-        const messageDate = dayjs().format('YYYY-MM-DD HH:mm:ss');
+        const messageDate = dayjs().format('hh:mm A');
         
 
         // if(sender === "bot"){
@@ -37,21 +85,46 @@
         //     )
         // }
             return (
-                <div>
-                {sender=== 'bot'&& (
-                    <img src="robot.png" width="45"/>
+                <div className={`chat-message chat-message-${sender}`}>
+                {sender === 'bot' && (
+                    <img className="chat-avatar" src="robot.png" width="45"/>
                 )}
-                {message}
-                {sender=== 'user'&& (
-                    <img src="user.png" width="45"/>
+                <div className="chat-bubble">
+                    <p className="chat-text">{message}</p>
+                    <span className="chat-time">{messageDate}</span>
+                </div>
+                {sender === 'user' && (
+                    <img className="chat-avatar" src="user.png" width="45"/>
                 )}
                     
                 </div>
             )
         }
         
-    function ChatMessages(){
-        const array = React.useState([{
+    function ChatMessages(props){
+        const {chatMessages} = props;
+        
+        return(
+            <section className="chat-messages">
+                {chatMessages.map((chatMessage)=>{
+                    return(
+                        <ChatMessage
+                        message={chatMessage.message}
+                        sender={chatMessage.sender}
+                        key={chatMessage.id}
+                />
+            )
+        })}
+            </section>
+        )
+
+
+    }
+    
+    
+    function App(){
+        
+        const [chatMessages,  setChatMessages] = React.useState([{
             sender: "user",
             message: "hello Chatbot",
             id: 1
@@ -70,52 +143,29 @@
             sender: "bot",
             id: 4
         }]);
-        const chatMessages = array[0];
-        const setChatMessages = array[1];
-
-        function SendMessage(){
-        
-            setChatMessages([...chatMessages, {
-                    sender: "user",
-                    message: "What is the time now ?",
-                    id: crypto.randomUUID()
-                }])
-        }
-        
-        
-        return(
-            <>
-                <button onClick={SendMessage}>Send Message</button>
-                
-                
-                {chatMessages.map((chatMessage)=>{
-                    return(
-                        <ChatMessage
-                        message={chatMessage.message}
-                        sender={chatMessage.sender}
-                        key={chatMessage.id}
-                />
-            )
-        })}
-            </>
-        )
-
-
-    }
-    
-    function App(){
+        // const chatMessages = array[0];
+        // const setChatMessages = array[1];
 
         return (
-            < >
-                <ChatInput/>
-                <ChatMessages/>
-            </>
+            <main className="chat-app">
+                <header className="chat-header">
+                    <h1>Chatbot</h1>
+                    <p>Ask anything. Press Enter to send, Escape to clear.</p>
+                </header>
+                <ChatMessages
+                chatMessages={chatMessages}
+                />
+                <ChatInput
+                chatMessages={chatMessages} 
+                setChatMessages={setChatMessages}                
+                />
+            </main>
         )
     }
 
 
     const container = document.querySelector('.js-container');
-    ReactDOM.createRoot(container).render(App())
+    ReactDOM.createRoot(container).render(<App />)
 </script>
 <script type="module" src="react-basics.js"></script>
 </body>
