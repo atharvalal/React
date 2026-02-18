@@ -1,35 +1,47 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { ChatInput } from './components/chatInput.jsx'
+import  ChatMessages  from './components/chatMessages.jsx'
 
-function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+
+function App(){
+        const [chatMessages,  setChatMessages] = useState([{
+            sender: "user",
+            message: "hello Chatbot",
+            id: 1
+
+
+        }, {
+            message: "Hi Atharva, How can I Help You ?",
+            sender: "bot",
+            id:2
+        },{
+            message: "what is the weather today ? ",
+            sender: "user",
+            id:3
+        }, {
+            message: "The Weather is Sunny Today ",
+            sender: "bot",
+            id: 4
+        }]);
+        // const chatMessages = array[0];
+        // const setChatMessages = array[1];
+
+        return (
+            <main className="chat-app">
+                <header className="chat-header">
+                    <h1>Chatbot</h1>
+                    <p>Ask anything. Press Enter to send, Escape to clear.</p>
+                </header>
+                <ChatMessages
+                chatMessages={chatMessages}
+                />
+                <ChatInput
+                setChatMessages={setChatMessages}                
+                />
+            </main>
+        )
+    }
 
 export default App
