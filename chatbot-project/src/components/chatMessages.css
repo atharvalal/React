@@ -1,0 +1,8 @@
+.chat-messages {
+  padding: 18px 20px;
+  background: var(--surface-2);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
