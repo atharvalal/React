@@ -2,7 +2,9 @@
   height: 60px;
   padding-left: 30px;
   padding-right: 30px;
-  background-color: white;
+  background: rgba(8, 14, 21, 0.92);
+  border-bottom: 1px solid rgba(98, 182, 255, 0.2);
+  backdrop-filter: blur(10px);
 
   display: flex;
   justify-content: center;
@@ -29,10 +31,12 @@
 .checkout-header .logo {
   height: 26px;
   margin-top: 0px;
+  filter: brightness(0) invert(1);
 }
 
 .checkout-header .mobile-logo {
   display: none;
+  filter: brightness(0) invert(1);
 }
 
 /* @media is used to create responsive design (making the
@@ -61,13 +65,14 @@
 
   font-size: 22px;
   font-weight: 500;
+  color: #e8f0f8;
 
   display: flex;
   justify-content: center;
 }
 
 .checkout-header .return-to-home-link {
-  color: rgb(25, 135, 84);
+  color: #3ecf8e;
 
   text-decoration: none;
   cursor: pointer;
@@ -100,6 +105,7 @@
 
 .checkout-header .checkout-header-right-section img {
   height: 32px;
+  filter: brightness(0) invert(1);
 }
 
 @media (max-width: 1000px) {

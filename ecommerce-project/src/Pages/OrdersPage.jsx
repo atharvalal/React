@@ -1,10 +1,14 @@
+import { useEffect } from "react";
 import './orders.css'
 import Header from '../components/Header';
-function OrdersPage() {
+function OrdersPage({ cart }) {
+  useEffect(() => {
+    document.title = "Orders Page";
+  }, []);
+
   return (
     <>
-    <title>Orders Page</title>
-        <Header />
+      <Header cart={cart} />
 
       <div className="orders-page">
         <div className="page-title">Your Orders</div>

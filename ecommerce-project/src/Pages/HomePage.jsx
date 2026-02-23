@@ -1,25 +1,33 @@
 import axios from "axios";
 import Header from "../components/Header.jsx";
 import "../index.css";
-import '../../starting-code/data/products.js';
-import { products } from "../../starting-code/data/products.js";
+import { useEffect, useState } from "react";
+import {formatMoney} from "../utils/money.js";
 
-function HomePage() {
-    axios.get("http://localhost:3000/api/products")
-    .then((response)=>{
-        console.log(response.data);
-    })
+function HomePage({ cart }) {
 
+  const [products, setProducts] = useState([]);
+
+
+  useEffect(() => {
+    document.title = "Home Page";
+    axios
+      .get("/api/products")
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
-    <>  
-    <Header />
-    <title>Home Page</title>
-    
-    <div className="home-page">
+    <>
+    <Header cart={cart} />
+      <div className="home-page">
         <div className="products-grid">
-            {products.map((product)=>{
-                return (
+            {products.map((product) => {
+              return (
                   <div key={product.id} className="product-container">
                     <div className="product-image-container">
                       <img
@@ -42,7 +50,7 @@ function HomePage() {
                       </div>
                     </div>
 
-                    <div className="product-price">${(product.priceCents / 100).toFixed(2)}</div>
+                    <div className="product-price">{formatMoney(product.priceCents)}</div>
 
                     <div className="product-quantity-container">
                       <select>
@@ -70,7 +78,7 @@ function HomePage() {
                       Add to Cart
                     </button>
                   </div>
-                );
+              );
             })}
         </div>
       </div>

@@ -1,10 +1,14 @@
+import { useEffect } from "react";
 import "./tracking.css";
 import Header from '../components/Header';
-function TrackingPage() {
+function TrackingPage({ cart }) {
+  useEffect(() => {
+    document.title = "Tracking Page";
+  }, []);
+
   return (
     <>
-    <title>Tracking Page</title>
-      <Header />
+      <Header cart={cart} />
 
       <div className="tracking-page">
         <div className="order-tracking">
