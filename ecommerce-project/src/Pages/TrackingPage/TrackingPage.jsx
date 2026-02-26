@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./tracking.css";
-import Header from '../components/Header';
+import Header from '../../components/Header';
 function TrackingPage({ cart }) {
   useEffect(() => {
     document.title = "Tracking Page";
