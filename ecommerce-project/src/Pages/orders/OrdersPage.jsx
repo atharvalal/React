@@ -10,9 +10,12 @@ const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     document.title = "Orders Page";
-    axios.get("/api/orders?expand=products").then((response)=>{
-        setOrders(response.data);
-    })
+    const setOrdersDetails = async () =>{
+      let response = await axios.get("/api/orders?expand=products")
+      setOrders(response.data)
+    }
+    setOrdersDetails()
+    
   }, []);
 
   return (

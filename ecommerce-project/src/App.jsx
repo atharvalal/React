@@ -9,16 +9,13 @@ import "./App.css";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-
+  
   useEffect(() => {
-    axios
-      .get("/api/cart-items?expand=product")
-      .then((response) => {
-        setCartItems(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const fetchAppData = async() => {
+      const response = await axios.get("/api/cart-items?expand=product");
+      setCartItems(response.data)
+    };
+     fetchAppData()
   }, []);
 
   return (
