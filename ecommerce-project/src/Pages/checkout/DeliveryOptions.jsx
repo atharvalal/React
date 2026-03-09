@@ -1,5 +1,34 @@
+import axios from "axios";
 import { formatMoney } from "../../utils/money";
-function DeliveryOptions({item,deliveryOptions,selectedDelivery,setSelectedDelivery,getDeliveryDate}) {
+
+function DeliveryOptions({
+  item,
+  deliveryOptions,
+  selectedDelivery,
+  setSelectedDelivery,
+  getDeliveryDate,
+  onDeliveryOptionChange,
+}) {
+  const handleDeliveryChange = async (optionId) => {
+    // 1. Update local state first
+    setSelectedDelivery((prev) => ({
+      ...prev,
+      [item.productId]: optionId,
+    }));
+
+    // 2. Send the selected option to the backend
+    try {
+      await axios.put(`/api/cart-items/${item.productId}`, {
+        deliveryOptionId: optionId,
+      });
+      if (onDeliveryOptionChange) {
+        await onDeliveryOptionChange();
+      }
+    } catch (error) {
+      console.error("Failed to update delivery option:", error);
+    }
+  };
+
   return (
     <>
       <div className="delivery-options">
@@ -10,13 +39,8 @@ function DeliveryOptions({item,deliveryOptions,selectedDelivery,setSelectedDeliv
               type="radio"
               name={`delivery-option-${item.productId}`}
               checked={option.id === selectedDelivery[item.productId]}
-              onChange={() =>
-                setSelectedDelivery((prev) => ({
-                  ...prev,
-                  [item.productId]: option.id,
-                }))
-              }
               className="delivery-option-input"
+              onChange={() => handleDeliveryChange(option.id)} // ✅ Moved here, passes option.id directly
             />
             <div>
               <div className="delivery-option-date">
@@ -34,4 +58,5 @@ function DeliveryOptions({item,deliveryOptions,selectedDelivery,setSelectedDeliv
     </>
   );
 }
+
 export default DeliveryOptions;

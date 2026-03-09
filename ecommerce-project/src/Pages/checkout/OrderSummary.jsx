@@ -1,6 +1,14 @@
+import axios from "axios";
 import { formatMoney } from "../../utils/money";
 import DeliveryOptions from "./DeliveryOptions";
-function OrderSummary({ cart,deliveryOptions,selectedDelivery,setSelectedDelivery,getDeliveryDate }) {
+function OrderSummary({
+  cart,
+  deliveryOptions,
+  selectedDelivery,
+  setSelectedDelivery,
+  getDeliveryDate,
+  onDeliveryOptionChange,
+}) {
   return (
     <>
       <div className="order-summary">
@@ -8,6 +16,10 @@ function OrderSummary({ cart,deliveryOptions,selectedDelivery,setSelectedDeliver
           const selectedOption = deliveryOptions.find(
             (o) => o.id === selectedDelivery[item.productId],
           );
+        const deleteCartItem = async()=>{
+          await axios.delete(`/api/cart-items/${item.productId}`);
+          window.location.reload();
+        }
 
           return (
             <div key={item.productId} className="cart-item-container">
@@ -43,9 +55,10 @@ function OrderSummary({ cart,deliveryOptions,selectedDelivery,setSelectedDeliver
                     <span className="update-quantity-link link-primary">
                       Update
                     </span>
-                    <span className="delete-quantity-link link-primary">
+                    <button className="delete-quantity-link link-primary"
+                    onClick={deleteCartItem}>
                       Delete
-                    </span>
+                    </button>
                   </div>
                 </div>
 
@@ -53,7 +66,8 @@ function OrderSummary({ cart,deliveryOptions,selectedDelivery,setSelectedDeliver
                 deliveryOptions={deliveryOptions}
                  selectedDelivery={selectedDelivery} 
                  setSelectedDelivery={setSelectedDelivery} 
-                 getDeliveryDate={getDeliveryDate}/>
+                 getDeliveryDate={getDeliveryDate}
+                 onDeliveryOptionChange={onDeliveryOptionChange}/>
               </div>
             </div>
           );

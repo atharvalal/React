@@ -12,17 +12,23 @@ function CheckoutPage({ cart = [] }) {
   const [selectedDelivery, setSelectedDelivery] = useState({});
   const [paymentSummary, setPaymentSummary] = useState(null);
 
+  const loadPaymentSummary = async () => {
+    const response = await axios.get("/api/payment-summary");
+    setPaymentSummary(response.data);
+  };
+
   useEffect(() => {
     document.title = "Checkout Page";
-    const fetchCheckoutData=async()=>{
-      let  response = await axios.get("/api/delivery-options?expand=estimatedDeliveryTime");
-      setDeliveryOptions(response.data)
-      response = await axios.get("/api/payment-summary");
-      setPaymentSummary(response.data);
-      
-    }
-    fetchCheckoutData()
-  }, []);
+    const fetchCheckoutData = async () => {
+      const [deliveryResponse, paymentResponse] = await Promise.all([
+        axios.get("/api/delivery-options?expand=estimatedDeliveryTime"),
+        axios.get("/api/payment-summary"),
+      ]);
+      setDeliveryOptions(deliveryResponse.data);
+      setPaymentSummary(paymentResponse.data);
+    };
+    fetchCheckoutData();
+  }, [cart]);
 
   useEffect(() => {
     setSelectedDelivery(
@@ -33,6 +39,10 @@ function CheckoutPage({ cart = [] }) {
   const getDeliveryDate = (ms) =>
     dayjs(ms).format("dddd, MMMM D");
 
+  const handleDeliveryOptionChange = async () => {
+    await loadPaymentSummary();
+  };
+
   return (
     <>
       <CheckoutHeader paymentSummary={paymentSummary} />
@@ -40,7 +50,14 @@ function CheckoutPage({ cart = [] }) {
       <div className="checkout-page">
         <div className="page-title">Review your order</div>
         <div className="checkout-grid">
-          <OrderSummary cart={cart} deliveryOptions={deliveryOptions} selectedDelivery={selectedDelivery} setSelectedDelivery={setSelectedDelivery} getDeliveryDate={getDeliveryDate}/>
+          <OrderSummary
+            cart={cart}
+            deliveryOptions={deliveryOptions}
+            selectedDelivery={selectedDelivery}
+            setSelectedDelivery={setSelectedDelivery}
+            getDeliveryDate={getDeliveryDate}
+            onDeliveryOptionChange={handleDeliveryOptionChange}
+          />
           <PaymentSummary paymentSummary={paymentSummary}/>
         </div>
       </div>
